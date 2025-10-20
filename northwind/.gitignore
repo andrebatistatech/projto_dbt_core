@@ -2,3 +2,70 @@
 target/
 dbt_packages/
 logs/
+
+# =========================
+# Python / Virtualenv
+# =========================
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.build/
+dist/
+build/
+
+# =========================
+# dbt Core
+# =========================
+# Artefatos e diretórios gerados
+target/
+logs/
+dbt_packages/
+dbt_modules/
+
+# Se você mantém perfis dentro do repositório (não recomendado com credenciais reais),
+# ignore o profiles.yml e mantenha apenas um exemplo.
+profiles/profiles.yml
+# Opcional: mantenha um arquivo de exemplo versionado
+# !profiles/profiles.example.yml
+
+# =========================
+# Docker
+# =========================
+# Variáveis e arquivos locais
+.env
+.env.*
+.dockerignore
+
+# =========================
+# VS Code / IDEs
+# =========================
+.vscode/
+.idea/
+*.code-workspace
+
+# =========================
+# SO e arquivos diversos
+# =========================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.swo
+
+# =========================
+# Testes e qualidade (se usar)
+# =========================
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.cache/

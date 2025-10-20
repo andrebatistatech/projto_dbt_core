@@ -1,6 +1,6 @@
 # dbt-core-northwind-project
 
-Projeto de conclusão do bootcamp de SQL e analytics engineer da [Jornada de Dados](www.suajornadadedados.com.br)
+Projeto de conclusão do bootcamp de SQL e analytics engineer
 
 ## O que é dbt?
 
@@ -160,23 +160,5 @@ Abra seu navegador e vá para:
 
 Você verá a documentação interativa gerada pelo dbt.
 
-## Jornada de Dados
 
-Esse projeto faz parte da comunidade de estudo Jornada de dados
-Nossa missão é **fornecer o melhor ensino em engenharia de dados**
 
-![Texto alternativo](./pics/jornada.png)
-
-Se você quer:
-
-1) Construir uma **base sólida** em Python e SQL
-2) Aprender as **principais habilidades e ferramentas** de engenharia de dados
-3) Criar ou melhorar seu **portfólio** de dados
-4) Criar ou aumentar o seu **networking** na área
-5) Mudar ou dar o **próximo passo em sua carreira**
-
-A **Jornada de Dados** é o seu lugar
-
-## Veja a documentação completa**:
-
-[![Documentacao](./pics/doc.png)](https://lvgalvao.github.io/dbt-core-northwind-project/)
