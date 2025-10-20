@@ -38,27 +38,29 @@ services:
   dbt:
     build:
       context: .
-      dockerfile: Dockerfile    # ajuste se o nome do seu Dockerfile for outro
-    working_dir: /app
+      dockerfile: Dockerfile
+    working_dir:  /app
     volumes:
-      - ./:/app
-      - ./profiles:/root/.dbt   # monte seu profiles.yml aqui
+      - ./northwind:/app
+      - ./profiles:/root/.dbt
     environment:
-      # DEV (alinha com Postgres do compose)
+      # DEV (útil se você alternar para target: dev)
       DBT_HOST: postgres
       DBT_PORT: "5432"
       DBT_USER: admin
       DBT_PASSWORD: admin
       DBT_DBNAME: northwind
       DBT_SCHEMA: analytics
+      DBT_THREADS: "4"
 
-      # Defaults para evitar Parsing Error (mesmo sem usar PROD agora)
+      # PROD (deve bater com seu profiles.yml)
       DB_HOST_PROD: postgres
       DB_PORT_PROD: "5432"
       DB_USER_PROD: admin
-      DB_PASSWORD_PROD: admin
+      DB_PASS_PROD: admin          # ATENÇÃO: agora é PASS (igual ao profiles.yml)
       DB_NAME_PROD: northwind
       DB_SCHEMA_PROD: analytics
+      DB_THREADS_PROD: "8"         # incluído para evitar o erro
     depends_on:
       postgres:
         condition: service_healthy
