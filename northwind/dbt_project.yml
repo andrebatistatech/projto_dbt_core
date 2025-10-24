@@ -1,46 +1,83 @@
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
+# dbt_project.yml
 name: 'northwind'
 version: '1.0.0'
 
-# This setting configures which "profile" dbt uses for this project.
+# Perfil do dbt que deve existir em profiles.yml
 profile: 'northwind'
 
-# These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
+# Pastas do projeto
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
-docs-paths: ["docs"]  # Adicione esta linha
+docs-paths: ["docs"]
 
-
-clean-targets:         # directories to be removed by `dbt clean`
+# Pastas removidas por `dbt clean`
+clean-targets:
   - "target"
   - "dbt_packages"
 
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
+# Configurações globais
+quoting:
+  database: false
+  schema: false
+  identifier: false
 
-# In this example config, we tell dbt to build all models in the example/
-# directory as views. These settings can be overridden in the individual model
-# files using the `{{ config(...) }}` macro.
+# Variáveis globais (adicione se precisar em macros/models)
+vars: {}
+
+# Seeds: controle de cabeçalho, tipos e schema
+seeds:
+  +schema: "seed"
+  +quote_columns: false
+  northwind:
+    +enabled: true
+    # Exemplo de tipos por coluna (ajuste conforme suas seeds)
+    # customers.csv:
+    #   +column_types:
+    #     customer_id: varchar
+    #     company_name: varchar
+
+# Snapshots: esquema dedicado
+snapshots:
+  +schema: "snapshot"
+
+# Tests: configurações padrão
+tests:
+  +severity: "ERROR"
+
+# Documentação: habilita persistência de docs (se usar docs blocks e exposures)
+# Você já tem docs-paths; opcionalmente defina configs adicionais se quiser
+# dispatch, packages, exposures podem ser adicionados conforme crescer o projeto
+
+# Modelos por camada
 models:
   northwind:
+
+    # Camada bronze (raw): views
     raw:
-      materialized: view
+      +materialized: view
+      +tags: ["bronze", "raw"]
       +docs:
-        node_color: "#cd7f32"  # Cor bronze para a camada raw
+        node_color: "#cd7f32"
+
+    # Camada prata (staging): views
     staging:
-      materialized: view
+      +materialized: view
+      +tags: ["silver", "staging"]
       +docs:
-        node_color: "#c0c0c0"  # Cor prata para a camada staging
+        node_color: "#c0c0c0"
+      # Convenções úteis de nomes/alias (opcional)
+      # +alias: "stg__{{ this.name }}"
+
+    # Camada ouro (reports): tables no schema gold
     reports:
-      +schema: "gold"  # Define o schema "gold" para as tabelas report_
-      materialized: table
+      +schema: "gold"
+      +materialized: table
+      +tags: ["gold", "reports"]
       +docs:
-        node_color: "#e6b530"  # Cor ouro para a camada reports
+        node_color: "#e6b530"
+      # Particionamento/clusterização específicos por warehouse podem ser adicionados
+      # via configs por modelo quando necessário
