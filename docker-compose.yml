@@ -2,11 +2,13 @@ services:
   postgres:
     image: postgres:16
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: northwind
+      - POSTGRES_DB=northwind
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
     ports:
-      - "5432:5432"
+      - "55432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d  # roda northwind.sql na primeira inicialização
@@ -39,10 +41,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "8085:8080"
     working_dir:  /app
     volumes:
       - ./northwind:/app
       - ./profiles:/root/.dbt
+
     environment:
       # DEV (útil se você alternar para target: dev)
       DBT_HOST: postgres
@@ -66,8 +71,8 @@ services:
         condition: service_healthy
     networks:
       - analytics-net
-    command: ["bash", "-lc", "dbt debug && tail -f /dev/null"]
-
+    # command: ["bash", "-lc", "dbt debug && tail -f /dev/null"]
+    command: ["sleep", "infinity"]
 volumes:
   pgdata:
   pgadmin_data:
