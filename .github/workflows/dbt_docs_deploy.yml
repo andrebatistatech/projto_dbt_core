@@ -6,20 +6,20 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy-dbt-docs:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Python
+    - name: Set up Python 3.8
       uses: actions/setup-python@v3
       with:
         python-version: 3.8
 
-    - name: Install dbt
-      run: pip install dbt-postgres
+    - name: Install dependencies from requirements.txt
+      run: pip install -r northwind/requirements.txt
 
     - name: Set up dbt profile
       run: |
@@ -36,10 +36,10 @@ jobs:
               password: ${{ secrets.DB_PASS_PROD }}
               dbname: ${{ secrets.DB_NAME_PROD }}
               schema: ${{ secrets.DB_SCHEMA_PROD }}
-              threads: ${{ secrets.DB_THREADS_PROD }}
+              threads: 4 # Threads pode ser um valor fixo aqui
         " > ~/.dbt/profiles.yml
 
-    - name: Install dependencies and generate docs
+    - name: Generate dbt docs
       run: |
         cd northwind
         dbt docs generate
@@ -47,5 +47,9 @@ jobs:
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GH_PAT }}
+        # Este token é gerado automaticamente pelo GitHub Actions.
+        # Você não precisa criar um segredo GH_PAT para este uso básico.
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./northwind/target
+        # Opcional: se o seu site não estiver na raiz, descomente a linha abaixo
+        # publish_branch: gh-pages
